@@ -1,16 +1,16 @@
 require 'activeadmin'
 require 'cancan'
- 
+
 ActiveAdmin::Namespace.class_eval do
   alias_method :old_register, :register
-  
+
   def register(resource_class, options = {}, &block)
     config = find_or_build_resource(resource_class, options)
     register_resource_controller(config)
     resource_dsl.prepare_menu(config)
     config = old_register(resource_class, options, &block)
-    config.controller.load_and_authorize_resource
-    config    
+    config.controller.load_and_authorize_resource :class => resource_class
+    config
   end
 end
 
